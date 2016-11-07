@@ -1,0 +1,51 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>登陆页</title>
+</head>
+<body>
+    <div>
+        <p>用户名:<input type="text" id="txtName"/></p>
+        <p>密 码 :<input type="password" id="txtPwd"/></p>        
+        <input type="button" id="btnLogin" value="登陆"/>
+    </div>
+</body>
+</html>
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script>
+    $("#btnLogin").click(function(){
+        var txtName = $("#txtName").val().trim();
+        var txtPwd = $("#txtPwd").val().trim();
+        if (txtName.length<=0||txtPwd.length<=0) {
+            alert("请填写用户名或密码!"); return;
+        }
+        $.ajax({
+            async: true,//是否异步，默认是true
+            type: "post",
+            url: '@Url.Action("CheckLogin", "Login")',
+            data: { UserName: txtName, Pwd: txtPwd},//参数           
+            dataType: 'json',//返回数据类型。如果想解析json数据，那么类型这应该设置为json                   
+            success: function (msg) {
+                if (msg.msg=="ok") {
+                    window.location.href = '@Url.Action("Index","Home")';
+                } else {
+                    alert("请填写正确的用户名或密码~");
+                }
+            },
+            beforeSend: function () {
+                // 禁用按钮防止重复提交
+                $("#btnLogin").attr({ disabled: "disabled" });
+                $("#btnLogin").val("登陆中...");
+            },
+            complete: function () {
+                $("#btnLogin").removeAttr("disabled");
+            }
+        });
+        });
+</script>

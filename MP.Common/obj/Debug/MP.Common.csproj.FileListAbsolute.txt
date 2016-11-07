@@ -1,0 +1,10 @@
+G:\代码存放\C#代码\MusicPlay_Web\MP.Common\obj\Debug\MP.Common.csprojResolveAssemblyReference.cache
+G:\代码存放\C#代码\MusicPlay_Web\MP.Common\bin\Debug\MP.Common.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Common\bin\Debug\MP.Common.pdb
+G:\代码存放\C#代码\MusicPlay_Web\MP.Common\obj\Debug\MP.Common.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Common\obj\Debug\MP.Common.pdb
+G:\代码存放\Asp\Menu\MP.Common\bin\Debug\MP.Common.dll
+G:\代码存放\Asp\Menu\MP.Common\bin\Debug\MP.Common.pdb
+G:\代码存放\Asp\Menu\MP.Common\obj\Debug\MP.Common.csprojResolveAssemblyReference.cache
+G:\代码存放\Asp\Menu\MP.Common\obj\Debug\MP.Common.dll
+G:\代码存放\Asp\Menu\MP.Common\obj\Debug\MP.Common.pdb

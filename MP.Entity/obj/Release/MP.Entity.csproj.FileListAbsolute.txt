@@ -1,0 +1,12 @@
+G:\代码存放\C#代码\MusicPlay_Web\MP.Entity\bin\Release\MP.Entity.dll.config
+G:\代码存放\C#代码\MusicPlay_Web\MP.Entity\bin\Release\MP.Entity.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Entity\bin\Release\MP.Entity.pdb
+G:\代码存放\C#代码\MusicPlay_Web\MP.Entity\bin\Release\EntityFramework.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Entity\bin\Release\EntityFramework.SqlServer.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Entity\bin\Release\EntityFramework.xml
+G:\代码存放\C#代码\MusicPlay_Web\MP.Entity\bin\Release\EntityFramework.SqlServer.xml
+G:\代码存放\C#代码\MusicPlay_Web\MP.Entity\bin\Release\zh-Hans\EntityFramework.resources.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Entity\bin\Release\zh-Hans\EntityFramework.SqlServer.resources.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Entity\obj\Release\MP.Entity.csprojResolveAssemblyReference.cache
+G:\代码存放\C#代码\MusicPlay_Web\MP.Entity\obj\Release\MP.Entity.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Entity\obj\Release\MP.Entity.pdb

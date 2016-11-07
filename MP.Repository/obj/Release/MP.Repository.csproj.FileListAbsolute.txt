@@ -1,0 +1,14 @@
+G:\代码存放\C#代码\MusicPlay_Web\MP.Repository\bin\Release\MP.Repository.dll.config
+G:\代码存放\C#代码\MusicPlay_Web\MP.Repository\bin\Release\MP.Repository.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Repository\bin\Release\MP.Repository.pdb
+G:\代码存放\C#代码\MusicPlay_Web\MP.Repository\bin\Release\EntityFramework.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Repository\bin\Release\EntityFramework.SqlServer.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Repository\bin\Release\MP.Entity.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Repository\bin\Release\MP.Entity.pdb
+G:\代码存放\C#代码\MusicPlay_Web\MP.Repository\bin\Release\EntityFramework.xml
+G:\代码存放\C#代码\MusicPlay_Web\MP.Repository\bin\Release\EntityFramework.SqlServer.xml
+G:\代码存放\C#代码\MusicPlay_Web\MP.Repository\bin\Release\zh-Hans\EntityFramework.resources.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Repository\bin\Release\zh-Hans\EntityFramework.SqlServer.resources.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Repository\obj\Release\MP.Repository.csprojResolveAssemblyReference.cache
+G:\代码存放\C#代码\MusicPlay_Web\MP.Repository\obj\Release\MP.Repository.dll
+G:\代码存放\C#代码\MusicPlay_Web\MP.Repository\obj\Release\MP.Repository.pdb

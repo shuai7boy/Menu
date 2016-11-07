@@ -1,0 +1,77 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>欢迎进入后台</title>
+    <link rel="stylesheet" href="../Scripts/Admin/css/public.css" />
+    <link rel="stylesheet" href="../Scripts/Admin/css/index.css" />
+</head>
+<body>
+    <header class="header">
+        <h1>YM互动</h1>
+        <ul class="clearfix">
+            <li>
+                <a href='@Url.Action("SignOut","Home")'><i class="icon icon-plane"></i> 退出</a>
+            </li>
+        </ul>
+    </header>
+    <div class="main clear">
+        <aside class="aside">
+
+        </aside>
+        <div class="content" style="background-color:#EEEEEE;">
+            <iframe src='@Url.Action("Index2","Admin")' name="iframe" frameborder="0" scrolling="no" width="100%" height="98%"></iframe>
+        </div>
+    </div>   
+    @*<script src="~/Scripts/Admin/js/jquery-1.7.1.min.js"></script>*@
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+   
+</body>
+</html>
+<script>
+    var html = '<ul>';
+        @*'<ul><li> <a class="nav-title" href="@Url.Action("Index2","Admin")" target="iframe"><i class="icon icon-home"></i>首页</a></li>';*@
+    $.ajax({
+        async: false,//是否异步，默认是true
+        type: "get",
+        url: '@Url.Action("GetMenuData", "Home")',
+        dataType: 'json',//返回数据类型。如果想解析json数据，那么类型这应该设置为json
+        success: function (msg) {
+            if (msg.msg == "1") {
+                document.title = "欢迎" + msg.title + "进入后台";
+                for (var i = 0; i < msg.list.length; i++) {
+                    html += "<li>";
+                    html += '<a class="nav-title" href="javascript:;"><i class="icon ' + msg.list[i].ICON + '"></i>' + msg.list[i].Name + '<i class="icon icon-arr"></i></a>';
+                    var id = msg.list[i].ActionID;
+                    $.ajax({
+                        async: false,//是否异步，默认是true
+                        type: "get",
+                        url: '@Url.Action("GetChildMenu", "Home")?id='+id+'',
+                        dataType: 'json',//返回数据类型。如果想解析json数据，那么类型这应该设置为json
+                        success: function (msg2) {
+                            if (msg2 != null) {                              
+                                html += " <dl>";
+                                for (var j = 0; j < msg2.length; j++) {                                  
+                                    html += '<dd>';
+                                    html += ' <a href="../' + msg2[j].ControllerName + '/' + msg2[j].ActionName + '" target="iframe">' + msg2[j].Name + '</a>';
+                                    html += " </dd>";
+                                }
+                                html += " </dl>";
+                            }
+
+                        }
+                    });
+                    html += "</li>";
+                }
+            }
+        }
+    });
+    html += '</ul>';
+    $(".aside").append(html);
+</script>
+<script src="../Scripts/Admin/js/index.js"></script>

@@ -1,0 +1,195 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>给用户设置角色</title>
+    <style>
+        #left{
+            width:300px;
+            border:1px solid brown;
+            background-color:black;
+            color:white;
+            font-size:20px;
+           
+        }
+        #right{
+            width:500px;
+            border:1px solid red;
+              background-color:yellow;
+            font-size:20px;           
+        }
+        #tsMsg{
+            width:30%;
+            text-align:center;
+            height:20px;
+            background-color:green;
+            color:white;
+            margin:0px auto;
+            display:none;
+        }
+    </style>
+</head>
+<body>
+    <p id="tsMsg">操作成功</p>
+   <table style="margin-left:30px;position:absolute;">
+       <tr>
+           <td colspan="2"><h2>给用户设置角色</h2></td>
+       </tr>
+       <tr>
+           <td><b>请选择一个用户</b><input type="button" id="setRole" value="设置角色" style="color:blue;margin-left:20px;" /></td>
+           <td id="tdRight" style="display:none;"><b>请选择一个或多个角色</b><input type="button" id="btnSave" value="保存设置" style="position:absolute;right:0px;color:red;"/></td>
+       </tr>
+       <tr>
+           <td id="left">
+               @*<input type="radio" name="userName" value="1" />shuai7boy*@              
+              
+           </td>
+           <td id="right" style="display:none;">
+              @*<input type="checkbox" name="roleName" value="超级管理员"/>超级管理员
+               <input type="checkbox" name="roleName" value="管理员" />管理员
+               <input type="checkbox" name="roleName" value="群众" />群众*@
+           </td>
+       </tr>      
+   </table>   
+</body>
+</html>
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script>    
+    //首次加载只加载用户信息，选中用户给用户设置角色时，按照选中用户查询，然后在右边显示角色信息
+    $.ajax({
+        async: false,//是否异步，默认是true
+        type: "get",
+        url: '@Url.Action("GetUserMsg", "Power")',
+        dataType: 'json',//返回数据类型。如果想解析json数据，那么类型这应该设置为json
+        success: function (msg) {
+            if (msg != null) {
+                for (var i = 0; i < msg.length; i++) {
+                    var html = ' <input type="radio" name="userName" value="' + msg[i].UserID + '" />' + msg[i].UserName + '';
+                    $("#left").append(html);
+                }
+            }
+        }
+    });
+    //点击设置角色
+    $("#setRole").click(function () {
+        var rec = document.getElementsByName("userName");
+        var checkUserName = "";
+        for (var i = 0; i < rec.length; i++) {
+            if (rec[i].checked) {
+                checkUserName = rec[i].value; break;
+            }
+        }
+        if (checkUserName == "") {
+            alert("请选择要设置的用户!"); return;
+        }
+        //显示隐藏的右侧信息
+        $("#tdRight").show();
+        $("#right").show();
+        $("#right").empty();
+        //获取所有的角色信息
+        $.ajax({
+            async: false,//是否异步，默认是true
+            type: "post",
+            url: '@Url.Action("GetRoleMsg", "Power")',
+            dataType: 'json',//返回数据类型。如果想解析json数据，那么类型这应该设置为json
+            success: function (msg1) {
+                if (msg1 != null) {
+                    for (var i = 0; i < msg1.length; i++) {
+
+                        //根据选中用户查询角色信息
+                        $.ajax({
+                            async: false,//是否异步，默认是true
+                            type: "post",
+                            url: '@Url.Action("GetCheckRoleMsg", "Power")',
+                            data: { id: checkUserName},//参数
+                            dataType: 'json',//返回数据类型。如果想解析json数据，那么类型这应该设置为json
+                            success: function (msg2) {
+                                if (msg2 != null) {
+                                    var isHave = false;
+                                    var html="";
+                                    for (var j = 0; j < msg2.length; j++) {
+                                        if (msg1[i].RoleID == msg2[j]) {
+                                            isHave = true;
+                                            break;
+                                        }
+                                    }
+                                    if (isHave) {
+                                        html+= ' <input type="checkbox" checked="checked" name="roleName" value="' + msg1[i].RoleID + '"/>' + msg1[i].RoleName + '';
+                                    } else {
+                                        html+= ' <input type="checkbox" name="roleName" value="' + msg1[i].RoleID + '"/>' + msg1[i].RoleName + '';
+                                    }
+                                    $("#right").append(html);
+                                } else {
+                                    var html =' <input type="checkbox" name="roleName" value="' + msg1[i].RoleID + '"/>' + msg1[i].RoleName + '';
+                                    $("#right").append(html);
+                                }
+                            }
+                        });
+
+                    }
+                }
+            }
+        });
+
+
+    });
+    //点击保存
+    $("#btnSave").click(function () {
+        var rec = document.getElementsByName("userName");
+        var checkUserName = "";
+        var checkRoleName = "";
+        for (var i = 0; i < rec.length; i++) {
+            if (rec[i].checked) {
+                checkUserName = rec[i].value; break;
+            }
+        }
+        if (checkUserName=="") {
+            alert("请选择要设置的用户!"); return;
+        }
+        var roleName = document.getElementsByName("roleName");
+        for (var j = 0; j < roleName.length; j++) {
+            if (roleName[j].checked) {
+                checkRoleName += roleName[j].value + ",";
+            }
+        }
+
+        if (checkRoleName=="") {
+            if (confirm("你确定不设置任何角色?")) {
+
+            } else {
+                return;
+            }
+        }
+        checkRoleName = checkRoleName.substr(0, checkRoleName.length - 1);       
+        $.ajax({
+            async: false,//是否异步，默认是true
+            type: "post",
+            url: '@Url.Action("SetUserRole", "Power")',
+            data: { UserID: checkUserName, RoleID: checkRoleName},//参数           
+            dataType: 'text',//返回数据类型。如果想解析json数据，那么类型这应该设置为json
+            success: function (msg) {                
+                if (msg == "ok") {
+                    $("#tsMsg").slideDown(300);
+                    var timeoutId = window.setTimeout(function () {
+                        $("#tsMsg").slideUp(500);
+                    }, 1300);                                  
+
+                } else {
+                    $("#tsMsg").css("backgroundColor", "brown");
+                    $("#tsMsg").html("操作失败");
+                    $("#tsMsg").slideDown(300);
+                    var timeoutId = window.setTimeout(function () {
+                        $("#tsMsg").slideUp(500);
+                    }, 1300);
+                }
+            }
+        });
+    });      
+ 
+   
+</script>

@@ -1,0 +1,95 @@
+.header {
+  height: 78px;
+  background: url(../images/top-bg.png) repeat-x #444;
+}
+.header h1 {
+  float: left;
+  width: 205px;
+  line-height: 78px;
+  text-align: center;
+  font-weight: normal;
+  font-size: 30px;
+  color: #fff;
+}
+.header ul {
+  float: right;
+  margin: 25px 40px 0 0;
+  list-style: none;
+}
+.header ul li {
+  float: left;
+  margin: 0 5px;
+}
+.header ul li a {
+  font-size: 14px;
+  color: #fff;
+}
+.main {
+  position: absolute;
+  top: 78px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.aside {
+  float: left;
+  width: 220px;
+  height: 100%;
+  overflow-y: auto;
+  background: #444;
+}
+.aside ul {
+  padding-top: 13px;
+}
+.aside ul li {
+  line-height: 40px;
+}
+.aside ul li a,
+.aside ul li dl dd a {
+  display: block;
+  padding: 0 15px;
+  font-size: 14px;
+  color: #ababab;
+  border-bottom: 1px solid #4e4e4e;
+  transition: all .3s ease;
+  -webkit-transition: all .3s ease;
+}
+.aside ul li a:hover,
+.aside ul li dl dd a:hover {
+  color: #fff;
+}
+.aside ul li.active a {
+  background: #2f2f2f;
+}
+.aside ul li.active dl dd a.active {
+  color: #fff;
+}
+.aside ul li a .icon {
+  margin-right: 5px;
+  font-weight: bold;
+}
+.aside ul li a .icon-arr {
+  float: right;
+  margin: 0;
+  transition: all .3s ease;
+  -webkit-transition: all .3s ease;
+  transform: rotate(0);
+  -webkit-transform: rotate(0);
+}
+.aside ul li a:hover .icon-arr,
+.aside ul li.active a .icon-arr {
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+}
+.aside ul li dl {
+  display: none;
+}
+.aside ul li dl dd a {
+  padding: 0 15px 0 36px;
+}
+.content {
+  height: 100%;
+  margin-left: 220px;
+  overflow-y: auto;
+  background: #fff;
+}

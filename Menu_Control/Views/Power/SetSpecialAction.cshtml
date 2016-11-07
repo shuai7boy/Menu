@@ -1,0 +1,232 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>给用户设置特殊权限</title>
+    <style>
+        #left {
+            width: 300px;
+            border: 1px solid brown;
+            background-color: black;
+            color: white;
+            font-size: 20px;
+        }
+
+        #right {
+            width: 500px;
+            border: 1px solid red;
+            background-color: yellow;
+            font-size: 20px;
+        }
+
+        #tsMsg {
+            width: 30%;
+            text-align: center;
+            height: 20px;
+            background-color: green;
+            color: white;
+            margin: 0px auto;
+            display: none;
+        }
+    </style>
+</head>
+<body>    
+    <p id="tsMsg">操作成功</p>
+    <table style="margin-left:30px;position:absolute;">
+        <tr>
+            <td colspan="2"><h2>给用户设置特殊权限</h2></td>
+        </tr>
+        <tr>
+            <td><b>请选择一个用户</b><input type="button" id="setRole" value="设置特殊权限" style="color:blue;margin-left:20px;" /></td>
+            <td id="tdRight" style="display:none;"><b>请设置一个或多个权限</b><input type="button" id="btnSave" value="保存设置" style="position:absolute;right:0px;color:red;" /></td>
+        </tr>
+        <tr>
+            <td id="left">
+                @*<input type="radio" name="userName" value="1" />shuai7boy*@
+
+            </td>
+            <td id="right" style="display:none;">
+                <ul id="ul1">
+                    @*<li>*@
+                       @*<input type="hidden" id="hidactName1" value="1" ryj=""/>首页
+                        <input type="radio" name="actName1" onclick="SetHidCheck(this)" value="1"/>允许
+                        <input type="radio" name="actName1" onclick="SetHidCheck(this)" value="0" />禁止
+                        <input type="button" onclick="ClearCheck(this)" id="actName1" value="清除"/>*@
+                    @*</li>*@                   
+                </ul>
+                @*<input type="checkbox" name="roleName" value="超级管理员"/>超级管理员
+                    <input type="checkbox" name="roleName" value="管理员" />管理员
+                    <input type="checkbox" name="roleName" value="群众" />群众*@
+            </td>
+        </tr>
+    </table>   
+</body>
+</html>
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script>    
+    //给隐藏域设置选中内容
+    SetHidCheck=function(hidName)
+    {
+        var val=hidName.value;//获取是1还是0
+        var hh = "hid" + hidName.name;
+        if (val=="1") {
+            $("#" + hh + "").attr("ryj", "true");
+        } else if (val == "0") {
+            $("#" + hh + "").attr("ryj", "false");
+        }              
+    }
+    //清除选中
+    ClearCheck = function (chkMsg) {
+        var rec = chkMsg.id;
+        var recName = document.getElementsByName(rec);
+        hidName = "hid" + rec;       
+        for (var i = 0; i < recName.length; i++) {
+            $(recName[i]).removeAttr("checked");
+        }       
+        $("#" + hidName + "").attr("ryj", "");
+    }   
+
+    //首次加载只加载用户信息，选中用户给用户设置特殊权限时，按照选中用户查询，然后在右边显示角色信息
+    $.ajax({
+        async: false,//是否异步，默认是true
+        type: "get",
+        url: '@Url.Action("GetUserMsg", "Power")',
+        dataType: 'json',//返回数据类型。如果想解析json数据，那么类型这应该设置为json
+        success: function (msg) {
+            if (msg != null) {
+                for (var i = 0; i < msg.length; i++) {
+                    var html = ' <input type="radio" name="userName" value="' + msg[i].UserID + '" />' + msg[i].UserName + '';
+                    $("#left").append(html);
+                }
+            }
+        }
+    });
+    //点击设置角色
+    $("#setRole").click(function () {      
+        var rec = document.getElementsByName("userName");
+        var checkUserName = "";
+        for (var i = 0; i < rec.length; i++) {
+            if (rec[i].checked) {
+                checkUserName = rec[i].value; break;
+            }
+        }
+        if (checkUserName == "") {
+            alert("请选择要设置的用户!"); return;
+        }
+        //显示隐藏的右侧信息
+        $("#tdRight").show();
+        $("#right").show();
+        $("#ul1").empty();
+        //获取所有的权限信息
+        $.ajax({
+            async: false,//是否异步，默认是true
+            type: "post",
+            url: '@Url.Action("GetActMsg", "Power")',
+            dataType: 'json',//返回数据类型。如果想解析json数据，那么类型这应该设置为json
+            success: function (msg1) {
+                if (msg1 != null) {
+                    for (var i = 0; i < msg1.length; i++) {
+
+                        //根据选中用户查询特殊权限信息
+                        $.ajax({
+                            async: false,//是否异步，默认是true
+                            type: "post",
+                            url: '@Url.Action("GeUserActionMsg", "Power")',
+                            data: { id: checkUserName},//参数
+                            dataType: 'json',//返回数据类型。如果想解析json数据，那么类型这应该设置为json
+                            success: function (msg2) {
+                                if (msg2 != null) {
+                                    var isHave = false;
+                                    var isChk = false;
+                                    var html = "";
+                                    for (var j = 0; j < msg2.length; j++) {
+                                        if (msg1[i].ActionID == msg2[j].ActionID) {
+                                            isHave = true;
+                                            isChk = msg2[j].IsTrue;
+                                            break;
+                                        }
+                                    }
+                                    if (isHave) {
+                                        if (isChk) {
+                                            html += '<li><input type="hidden" name="hidactName" id="hidactName' + msg1[i].ActionID + '" value="' + msg1[i].ActionID + '" ryj="true" />' + msg1[i].Name + ':<input type="radio" name="actName' + msg1[i].ActionID + '" onclick="SetHidCheck(this)" value="1" checked="checked"/>允许<input type="radio" name="actName' + msg1[i].ActionID + '" onclick="SetHidCheck(this)" value="0" />禁止<input type="button" onclick="ClearCheck(this)" id="actName' + msg1[i].ActionID + '" value="清除" />';
+                                        } else {
+                                            html += '<li><input type="hidden" name="hidactName" id="hidactName' + msg1[i].ActionID + '" value="' + msg1[i].ActionID + '" ryj="false" />' + msg1[i].Name + ':<input type="radio" name="actName' + msg1[i].ActionID + '" onclick="SetHidCheck(this)" value="1"/>允许<input type="radio" name="actName' + msg1[i].ActionID + '" onclick="SetHidCheck(this)" value="0" checked="checked" />禁止<input type="button" onclick="ClearCheck(this)" id="actName' + msg1[i].ActionID + '" value="清除" />';
+                                        }                                       
+                                        $("#ul1").append(html);
+                                    } else {
+                                        var html = '<li><input type="hidden" name="hidactName" id="hidactName' + msg1[i].ActionID + '" value="' + msg1[i].ActionID + '" ryj="" />' + msg1[i].Name + ':<input type="radio" name="actName' + msg1[i].ActionID + '" onclick="SetHidCheck(this)" value="1"/>允许<input type="radio" name="actName' + msg1[i].ActionID + '" onclick="SetHidCheck(this)" value="0"/>禁止<input type="button" onclick="ClearCheck(this)" id="actName' + msg1[i].ActionID + '" value="清除" />';
+                                        $("#ul1").append(html);
+                                    }
+                                }
+                            }
+                        });
+
+                    }
+                }
+            }
+        });
+
+
+    });
+    //点击保存
+    $("#btnSave").click(function () {      
+        var rec = document.getElementsByName("userName");
+        var checkUserName = "";
+        var checkIsTrue = "";
+        var checkActName = "";
+        for (var i = 0; i < rec.length; i++) {
+            if (rec[i].checked) {
+                checkUserName = rec[i].value; break;
+            }
+        }
+        if (checkUserName=="") {
+            alert("请选择要设置的用户!"); return;
+        }        
+        var hidactName = document.getElementsByName("hidactName");       
+        for (var j = 0; j < hidactName.length; j++) {
+            var strRyj = $(hidactName[j]).attr("ryj");           
+            if (strRyj.length > 0) {               
+                var hidId = hidactName[j].id.substr(10);
+                checkIsTrue += strRyj + ",";               
+                checkActName += hidId+",";             
+            }
+        }       
+        if (checkActName=="") {
+            if (confirm("你确定不设置任何特殊权限?")) {
+
+            } else {
+                return;
+            }
+        }
+        checkActName = checkActName.substr(0, checkActName.length - 1);
+        checkIsTrue = checkIsTrue.substr(0, checkIsTrue.length - 1);      
+        $.ajax({
+            async: false,//是否异步，默认是true
+            type: "post",
+            url: '@Url.Action("SetUserAction", "Power")',
+            data: { id: checkUserName, checkActName: checkActName, checkIsTrue: checkIsTrue },//参数
+            dataType: 'text',//返回数据类型。如果想解析json数据，那么类型这应该设置为json
+            success: function (msg) {
+                if (msg == "ok") {
+                    $("#tsMsg").slideDown(300);
+                    var timeoutId = window.setTimeout(function () {
+                        $("#tsMsg").slideUp(500);
+                    }, 1300);
+
+                } else {
+                    $("#tsMsg").css("backgroundColor", "brown");
+                    $("#tsMsg").html("操作失败");
+                    $("#tsMsg").slideDown(300);
+                    var timeoutId = window.setTimeout(function () {
+                        $("#tsMsg").slideUp(500);
+                    }, 1300);
+                }
+            }
+        });
+    });
+</script>
